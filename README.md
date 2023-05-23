@@ -25,11 +25,11 @@ The project is structured with a focus on simplicity and maintainability. Key co
 
 ## Using the Application
 
-Refer to the [setup.md](setup.md) for instructions on how to deploy and use the application.
+Refer to the [SETUP.md](SETUP.md) for instructions on how to deploy and use the application.
 
 ## Future Work
 
-See the [todo.md](todo.md) for a list of potential improvements and features that could be added in the future.
+See the [TODO.md](TODO.md) for a list of potential improvements and features that could be added in the future.
 
 ## Assumptions
 
