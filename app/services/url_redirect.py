@@ -1,12 +1,20 @@
 from app.db import database
 from fastapi import HTTPException
 
-async def redirect_to_url(redirect_in):
-    # Retrieve the original URL from the database
-    url_doc = await database["urls"].find_one({"short_url": redirect_in.url})
+
+async def redirect_to_url(hashed_url: str):
+    url_doc = await database.database.urls.find_one({"short_url": hashed_url})
 
     if url_doc is None:
         raise HTTPException(status_code=404, detail="URL not found")
 
-    # Return a redirect response
+    # Increment click count
+    await database.database.urls.update_one(
+        {"short_url": hashed_url}, {"$inc": {"click_count": 1}}
+    )
+
+    # If the URL is single-use, delete it after redirecting
+    if url_doc["single_use"]:
+        await database.database.urls.delete_one({"short_url": hashed_url})
+
     return {"url": url_doc["original_url"]}

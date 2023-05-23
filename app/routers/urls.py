@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.models import UrlIn, UrlOut, UrlRedirectIn
+from app.models.urls import UrlIn, UrlOut, UrlRedirectIn, UrlClicks
 from app.services import url_shortener, url_redirect
 
 router = APIRouter()
@@ -8,6 +8,10 @@ router = APIRouter()
 async def create_hash_url(url_in: UrlIn):
     return await url_shortener.create_short_url(url_in)
 
-@router.get("/{hashed_url}")
-async def redirect_url(redirect_in: UrlRedirectIn):
-    return await url_redirect.redirect_to_url(redirect_in)
+@router.get("/redirect")
+async def redirect_url(hashed_url: str):
+    return await url_redirect.redirect_to_url(hashed_url)
+
+@router.get("/clicks", response_model=UrlClicks)
+async def get_clicks(hashed_url: str):
+    return await url_shortener.get_clicks(hashed_url)
